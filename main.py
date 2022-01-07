@@ -15,13 +15,6 @@ app = Flask(
 
 model = tensorflow.keras.models.load_model("") #Model isn't included in code due to its size
 
-def ai(link, mainlink):
-  link = f'{mainlink}/{link}'
-  
-  f = requests.get(link)
-  
-  return f.text
-
 @app.route('/')
 def base_page():
 	random_num = random.randint(1, 100000)
@@ -32,7 +25,7 @@ def base_page():
 
 @app.route('/identify', methods = ["POST"])
 def sendBots():
-      url = message.embeds[0].image.url
+      url = request.form['invitecode']
       np.set_printoptions(suppress=True)
       data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
       image = Image.open(requests.get(url, stream=True)  .raw)
@@ -47,11 +40,14 @@ def sendBots():
 
       prediction = model.predict(data)
 	
+      r = requests.get(urll, allow_redirects=True)
+	
+      im = open(f'assets/image.png', 'wb').write(r.content)
+	
       for i in range(len(predictions)):
       	if predictions[i] > 0.7:
-
-      	return render_template(
-		'index2.html',code=pokemon_names[i],urll=urll)
+      		return render_template(
+			'index2.html',code=pokemon_names[i],urll=url)
 
     
 
